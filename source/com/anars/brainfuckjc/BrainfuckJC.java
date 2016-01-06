@@ -37,7 +37,7 @@ import javax.tools.ToolProvider;
 
 public class BrainfuckJC
 {
-  public BrainfuckJC(File brainfuckFile, File outputPath, String javaPackage, String javaClass, int executionSteps, int outputFormat)
+  public BrainfuckJC(File brainfuckFile, File outputPath, String javaPackage, String javaClass, int executionSteps, int outputFormat, boolean debugTrace)
   {
     super();
     String input = null;
@@ -49,7 +49,7 @@ public class BrainfuckJC
       String line = bufferedReader.readLine();
       while(line != null)
       {
-        stringBuilder.append(line.replaceAll("[^\\[\\]\\<\\>\\+\\-\\.\\,]", ""));
+        stringBuilder.append(line.replaceAll("[^\\[\\]\\<\\>\\+\\-\\.\\,]", "") + "\0");
         line = bufferedReader.readLine();
       }
       input = stringBuilder.toString();
@@ -114,8 +114,12 @@ public class BrainfuckJC
           case '+':
           case '-':
             stringBuilder.append(intent(indentation));
-            stringBuilder.append((command == '+' ? "in" : "de") + "creaseCellValue(" + counter + ");");
-            stringBuilder.append("\n");
+            stringBuilder.append((command == '+' ? "in" : "de") + "creaseCellValue(" + counter + ");\n");
+            if(debugTrace)
+            {
+              stringBuilder.append(intent(indentation));
+              stringBuilder.append("debugTrace(\"" + repeatChar(counter, command) + "\");\n");
+            }
             counter = 0;
             increaseCellValue |= (command == '+');
             decreaseCellValue |= (command == '-');
@@ -124,34 +128,55 @@ public class BrainfuckJC
           case '>':
           case '<':
             stringBuilder.append(intent(indentation));
-            stringBuilder.append("movePointer" + (command == '>' ? "Right" : "Left") + "(" + counter + ");");
-            stringBuilder.append("\n");
+            stringBuilder.append("movePointer" + (command == '>' ? "Right" : "Left") + "(" + counter + ");\n");
+            if(debugTrace)
+            {
+              stringBuilder.append(intent(indentation));
+              stringBuilder.append("debugTrace(\"" + repeatChar(counter, command) + "\");\n");
+            }
             counter = 0;
             movePointerRight |= (command == '>');
             movePointerLeft |= (command == '<');
             break;
           case '.':
             stringBuilder.append(intent(indentation));
-            stringBuilder.append("outputCurrentCell();");
-            stringBuilder.append("\n");
+            stringBuilder.append("outputCurrentCell();\n");
+            if(debugTrace)
+            {
+              stringBuilder.append(intent(indentation));
+              stringBuilder.append("debugTrace(\".\");\n");
+            }
             outputCurrentCell = true;
             getCellValue = true;
             break;
           case ',':
             stringBuilder.append(intent(indentation));
-            stringBuilder.append("inputIntoCurrentCell();");
-            stringBuilder.append("\n");
+            stringBuilder.append("inputIntoCurrentCell();\n");
+            if(debugTrace)
+            {
+              stringBuilder.append(intent(indentation));
+              stringBuilder.append("debugTrace(\",\");\n");
+            }
             inputIntoCurrentCell = true;
             expandArray = true;
             break;
           case '[':
             stringBuilder.append(intent(indentation));
-            stringBuilder.append("while((getCellValue() & 0xFF) != 0) {");
-            stringBuilder.append("\n");
+            stringBuilder.append("while((getCellValue() & 0xFF) != 0) {\n");
             indentation++;
+            if(debugTrace)
+            {
+              stringBuilder.append(intent(indentation));
+              stringBuilder.append("debugTrace(\"[\");\n");
+            }
             getCellValue = true;
             break;
           case ']':
+            if(debugTrace)
+            {
+              stringBuilder.append(intent(indentation));
+              stringBuilder.append("debugTrace(\"]\");\n");
+            }
             indentation--;
             stringBuilder.append(intent(indentation));
             stringBuilder.append("}");
@@ -380,6 +405,53 @@ public class BrainfuckJC
       stringBuilder.append("}\n");
       stringBuilder.append("\n");
     }
+    if(debugTrace)
+    {
+      stringBuilder.append(intent(1));
+      stringBuilder.append("private void debugTrace(String command)\n");
+      stringBuilder.append(intent(1));
+      stringBuilder.append("{\n");
+      stringBuilder.append(intent(2));
+      stringBuilder.append("System.out.println(command);\n");
+      stringBuilder.append(intent(2));
+      stringBuilder.append("for(int index = 0; index < (_array.length / 8) + 1; index++)\n");
+      stringBuilder.append(intent(2));
+      stringBuilder.append("{\n");
+      stringBuilder.append(intent(3));
+      stringBuilder.append("for(int offset = 0; offset < 8; offset++)\n");
+      stringBuilder.append(intent(4));
+      stringBuilder.append("if(index * 8 + offset < _array.length)\n");
+      stringBuilder.append(intent(5));
+      stringBuilder.append("System.out.print((index * 8 + offset == _pointer ? \"{\" : \" \")  + Integer.toString(1000 + (0xff & _array[index * 8 + offset])).substring(1) + (index * 8 + offset == _pointer ? \"}\" : \" \"));\n");
+      stringBuilder.append(intent(4));
+      stringBuilder.append("else\n");
+      stringBuilder.append(intent(5));
+      stringBuilder.append("System.out.print((index * 8 + offset == _pointer ? \"{\" : \" \") + \"000\" + (index * 8 + offset == _pointer ? \"}\" : \" \"));\n");
+      stringBuilder.append(intent(3));
+      stringBuilder.append("System.out.print(\"\\t\");\n");
+      stringBuilder.append(intent(3));
+      stringBuilder.append("for(int offset = 0; offset < 8; offset++)\n");
+      stringBuilder.append(intent(4));
+      stringBuilder.append("if(index * 8 + offset < _array.length)\n");
+      stringBuilder.append(intent(5));
+      stringBuilder.append("if((char)(_array[index * 8 + offset] & 0xFF) > 31)\n");
+      stringBuilder.append(intent(6));
+      stringBuilder.append("System.out.print((index * 8 + offset == _pointer ? \"{\" : \" \") + (char)(_array[index * 8 + offset] & 0xFF) + (index * 8 + offset == _pointer ? \"}\" : \" \"));\n");
+      stringBuilder.append(intent(5));
+      stringBuilder.append("else\n");
+      stringBuilder.append(intent(6));
+      stringBuilder.append("System.out.print((index * 8 + offset == _pointer ? \"{\" : \" \") + \".\" + (index * 8 + offset == _pointer ? \"}\" : \" \"));\n");
+      stringBuilder.append(intent(4));
+      stringBuilder.append("else\n");
+      stringBuilder.append(intent(5));
+      stringBuilder.append("System.out.print((index * 8 + offset == _pointer ? \"{\" : \" \") + \".\" + (index * 8 + offset == _pointer ? \"}\" : \" \"));\n");
+      stringBuilder.append(intent(3));
+      stringBuilder.append("System.out.println();\n");
+      stringBuilder.append(intent(2));
+      stringBuilder.append("}\n");
+      stringBuilder.append(intent(1));
+      stringBuilder.append("}\n");
+    }
     stringBuilder.append("}\n");
     PrintWriter printWriter = null;
     try
@@ -426,9 +498,14 @@ public class BrainfuckJC
   }
   private String intent(int indentation)
   {
+    return (repeatChar(indentation, '\t'));
+  }
+
+  private String repeatChar(int times, char character)
+  {
     StringBuilder stringBuilder = new StringBuilder();
-    for(int index = 0; index < indentation; index++)
-      stringBuilder.append("\t");
+    for(int index = 0; index < times; index++)
+      stringBuilder.append(character);
     return (stringBuilder.toString());
   }
 
@@ -442,6 +519,7 @@ public class BrainfuckJC
     String javaClass = null;
     int executionSteps = 3;
     int outputFormat = 0;
+    boolean debugTrace = false;
     for(int index = 0; index < args.length; index++)
     {
       String values[] = args[index].split("=");
@@ -454,15 +532,15 @@ public class BrainfuckJC
       {
         outputPath = new File(values[1]);
       }
-      else if(values[0].equals("-java-package") || values[0].equals("-jp"))
+      else if(values[0].equals("-java-package"))
       {
         javaPackage = values[1];
       }
-      else if(values[0].equals("-java-class") || values[0].equals("-jc"))
+      else if(values[0].equals("-java-class"))
       {
         javaClass = values[1];
       }
-      else if(values[0].equals("-execution-steps") || values[0].equals("-es"))
+      else if(values[0].equals("-execution-steps"))
       {
         executionSteps = Integer.parseInt(values[1]);
         if(executionSteps < 1 || executionSteps > 3)
@@ -473,6 +551,10 @@ public class BrainfuckJC
         outputFormat = Integer.parseInt(values[1]);
         if(outputFormat < 0 || outputFormat > 8)
           errorExit(values[0] + " value must be between 0 and 8", -1);
+      }
+      else if(values[0].equals("-debug-trace"))
+      {
+        debugTrace = true;
       }
       else if(values[0].equals("-help") || values[0].equals("-h"))
       {
@@ -491,7 +573,7 @@ public class BrainfuckJC
       javaClass = javaClass.substring(0, javaClass.indexOf("."));
       javaClass = javaClass.substring(0, 1).toUpperCase() + javaClass.substring(1);
     }
-    new BrainfuckJC(brainfuckFile, outputPath, javaPackage, javaClass, executionSteps, outputFormat);
+    new BrainfuckJC(brainfuckFile, outputPath, javaPackage, javaClass, executionSteps, outputFormat, debugTrace);
   }
   private static void errorExit(String message, int errorCode)
   {
