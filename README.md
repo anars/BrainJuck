@@ -9,6 +9,7 @@ The language's name is a reference to the slang term "brain fuck", which refers 
 The language consists of only eight simple commands, operates on an array of memory cells, also referred to as the tape, each initially set to zero. There is a pointer, initially pointing to the first memory cell. While it is fully Turing-complete, it is not intended for practical use, but to challenge and amuse programmers.
 
 ##Brainfuck Commands
+The eight language commands, each consisting of a single character:
 Command | Description
 :------:|:-----------
    >    | Move the pointer to the right
