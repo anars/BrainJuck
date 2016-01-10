@@ -10,6 +10,7 @@ The language consists of only eight simple commands, operates on an array of mem
 
 ##Brainfuck Commands
 The eight language commands, each consisting of a single character:
+
 Command | Description
 :------:|:-----------
    >    | Move the pointer to the right
