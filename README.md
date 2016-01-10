@@ -17,5 +17,5 @@ Command | Description
    -    | Decrement the byte at the data pointer
    .    | Output the byte at the data pointer
    ,    | Input a byte into memory cell at the data pointer
-   [    | if the byte at the data pointer is zero, then instead of moving the instruction pointer forward to the next command, jump it forward to the command after the matching ] command.
-   ]    | if the byte at the data pointer is nonzero, then instead of moving the instruction pointer forward to the next command, jump it back to the command after the matching [ command.
+   [    | Jump past the matching ] if the byte at the data pointer is 0
+   ]    | Jump back to the matching [ if the byte at the data pointer is not 0
