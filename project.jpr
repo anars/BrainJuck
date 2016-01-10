@@ -18,7 +18,7 @@
       <string v="oracle.bm.commonIde.data.project.ModelerProjectSettings/modelersContentSet"/>
       <string v="oracle.toplink.workbench.addin/toplinkContentSet"/>
    </list>
-   <value n="defaultPackage" v="com.anars.brainfuckjc"/>
+   <value n="defaultPackage" v="com.anars.brainjuck"/>
    <hash n="oracle.ide.model.TechnologyScopeConfiguration">
       <list n="technologyScope">
          <string v="Java"/>
@@ -30,10 +30,10 @@
    </hash>
    <hash n="oracle.jdeveloper.deploy.dt.DeploymentProfiles">
       <hash n="profileDefinitions">
-         <hash n="BrainfuckJC">
+         <hash n="BrainJuck">
             <hash n="archiveOptions">
                <value n="hasManifest" v="true"/>
-               <value n="mainClass" v="com.anars.brainfuckjc.BrainfuckJC"/>
+               <value n="mainClass" v="com.anars.brainjuck.Main"/>
             </hash>
             <hash n="fileGroups">
                <list n="groups">
@@ -60,13 +60,13 @@
                   </hash>
                </list>
             </hash>
-            <url n="jarURL" path="release/BrainfuckJC.jar"/>
+            <url n="jarURL" path="release/BrainJuck.jar"/>
             <value n="profileClass" v="oracle.jdeveloper.deploy.jar.ArchiveProfile"/>
-            <value n="profileName" v="BrainfuckJC"/>
+            <value n="profileName" v="BrainJuck"/>
          </hash>
       </hash>
       <list n="profileList">
-         <string v="BrainfuckJC"/>
+         <string v="BrainJuck"/>
       </list>
    </hash>
    <hash n="oracle.jdeveloper.model.PathsConfiguration">
@@ -77,6 +77,15 @@
          <list n="url-path">
             <url path="source/"/>
          </list>
+      </hash>
+   </hash>
+   <hash n="oracle.jdeveloper.runner.RunConfigurations">
+      <hash n="runConfigurationDefinitions">
+         <hash n="Default">
+            <value n="custom" v="false"/>
+            <value n="name" v="Default"/>
+            <url n="targetURL" path="source/com/anars/brainjuck/Main.java"/>
+         </hash>
       </hash>
    </hash>
    <hash n="oracle.jdevimpl.config.JProjectPaths">

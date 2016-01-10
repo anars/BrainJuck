@@ -1,5 +1,8 @@
 /**
- * BrainfuckJC - Brainfuck to Java Converter/Compiler
+ * BrainJuck - Rapid Application Development with only 3 bits!
+ * 
+ * Converter - Brainfuck to Java Converter Version 1.0
+ * 
  * Copyright (c) 2016 Anar Software LLC. < http://anars.com >
  * 
  * This program is free software: you can redistribute it and/or modify it under 
@@ -15,7 +18,7 @@
  * this program.  If not, see < http://www.gnu.org/licenses/ >
  * 
  */
-package com.anars.brainfuckjc;
+package com.anars.brainjuck;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,9 +38,9 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-public class BrainfuckJC
+public class Converter
 {
-  public BrainfuckJC(File brainfuckFile, File outputPath, String javaPackage, String javaClass, int executionSteps, int outputFormat, boolean debugTrace)
+  public Converter(File brainfuckFile, File outputPath, String javaPackage, String javaClass, int executionSteps, int outputFormat, boolean debugTrace)
   {
     super();
     String input = null;
@@ -412,7 +415,7 @@ public class BrainfuckJC
       stringBuilder.append(intent(1));
       stringBuilder.append("{\n");
       stringBuilder.append(intent(2));
-      stringBuilder.append("System.out.println(command);\n");
+      stringBuilder.append("System.out.println(\"Command : \" + command);\n");
       stringBuilder.append(intent(2));
       stringBuilder.append("for(int index = 0; index < (_array.length / 8) + 1; index++)\n");
       stringBuilder.append(intent(2));
@@ -573,7 +576,7 @@ public class BrainfuckJC
       javaClass = javaClass.substring(0, javaClass.indexOf("."));
       javaClass = javaClass.substring(0, 1).toUpperCase() + javaClass.substring(1);
     }
-    new BrainfuckJC(brainfuckFile, outputPath, javaPackage, javaClass, executionSteps, outputFormat, debugTrace);
+    new Converter(brainfuckFile, outputPath, javaPackage, javaClass, executionSteps, outputFormat, debugTrace);
   }
   private static void errorExit(String message, int errorCode)
   {

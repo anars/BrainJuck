@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="BrainfuckJC" default="build" basedir=".">
+<project name="BrainJuck" default="build" basedir=".">
 	<description>
-		BrainfuckJC Ant Build File - Copyright (c) 2016 Anar Software LLC. (http://anars.com)
+		BrainJuck Ant Build File - Copyright (c) 2016 Anar Software LLC. (http://anars.com)
 	</description>
 	<property name="source.dir" location="source"/>
 	<property name="classes.dir" location="classes"/>
@@ -12,17 +12,17 @@
 		<mkdir dir="${release.dir}"/>
 		<jar jarfile="${release.dir}/BrainfuckJC.jar" basedir="${classes.dir}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="com.anars.brainfuckjc.BrainfuckJC"/>
+				<attribute name="Main-Class" value="com.anars.brainjuck.Main"/>
 			</manifest>
 		</jar>
-		<checksum file="${release.dir}/BrainfuckJC.jar" forceOverwrite="yes"/>
+		<checksum file="${release.dir}/BrainJuck.jar" forceOverwrite="yes"/>
 		<move verbose="true" todir="${release.dir}">
 			<fileset dir="${release.dir}">
 				<include name="**MD5"/>
 			</fileset>
 			<mapper type="regexp" from="(.*)jar.MD5" to="\1md5"/>
 		</move>
-		<copy file="license.txt" tofile="${release.dir}/BrainfuckJC.license"/>
+		<copy file="license.txt" tofile="${release.dir}/BrainJuck.license"/>
 		<delete dir="${classes.dir}"/>
 	</target>
 </project>
