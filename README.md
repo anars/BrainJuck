@@ -13,9 +13,9 @@ Command | Description
 :------:|:-----------
    >    | Move the pointer to the right
    <    | Move the pointer to the left
-   +    | Increment (increase by one) the byte at the data pointer
-   -    | Decrement (decrease by one) the byte at the data pointer
+   +    | Increment the byte at the data pointer
+   -    | Decrement the byte at the data pointer
    .    | Output the byte at the data pointer
-   ,    | Input a character, storing its value in the byte at the data pointer
-   [    | Jump past the matching ] if the cell under the pointer is 0
-   ]    | Jump back to the matching [ if the cell under the pointer is nonzero
+   ,    | Input a byte into memory cell at the data pointer
+   [    | if the byte at the data pointer is zero, then instead of moving the instruction pointer forward to the next command, jump it forward to the command after the matching ] command.
+   ]    | if the byte at the data pointer is nonzero, then instead of moving the instruction pointer forward to the next command, jump it back to the command after the matching [ command.
