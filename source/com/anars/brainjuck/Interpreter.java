@@ -29,6 +29,7 @@ public class Interpreter
   private String sourceCode = null;
   private int _pointer = 0;
   private int _executingPoint = 0;
+
   public Interpreter(File sourceFile, boolean debug)
   {
     super();
@@ -42,49 +43,69 @@ public class Interpreter
       switch(command)
       {
         case COMMAND_INCREASE_VALUE:
-          increaseCellValue();
+          expandArray();
+          _array[_pointer]++;
           break;
         case COMMAND_DECREASE_VALUE:
-          decreaseCellValue();
+          expandArray();
+          _array[_pointer]--;
           break;
         case COMMAND_MOVE_POINTER_RIGHT:
-          movePointerRight();
+          _pointer++;
           break;
         case COMMAND_MOVE_POINTER_LEFT:
-          movePointerLeft();
+          _pointer--;
+          if(_pointer < 0)
+            _pointer = 0;
           break;
         case COMMAND_INPUT_VALUE:
-          inputIntoCurrentCell();
+          expandArray();
+          try
+          {
+            _array[_pointer] = (byte)System.in.read();
+          }
+          catch(Exception exception)
+          {
+            exception.printStackTrace();
+          }
           break;
         case COMMAND_OUTPUT_VALUE:
-          outputCurrentCell();
+          System.out.print((char)(getCellValue() & 0xFF));
           break;
         case COMMAND_DUMP_MEMORY:
-          memoryDump();
+          dumpMemory();
+          break;
+        case COMMAND_LOOP_START:
+          if(getCellValue() == 0)
+          {
+            int count = 1;
+            while(count > 0)
+            {
+              char nextChar = sourceCode.charAt(++_executingPoint);
+              if(nextChar == COMMAND_LOOP_START)
+                count++;
+              else if(nextChar == COMMAND_LOOP_END)
+                count--;
+            }
+          }
+          break;
+        case COMMAND_LOOP_END:
+          int count = 1;
+          while(count > 0)
+          {
+            char nextChar = sourceCode.charAt(--_executingPoint);
+            if(nextChar == COMMAND_LOOP_START)
+              count--;
+            else if(nextChar == COMMAND_LOOP_END)
+              count++;
+          }
+          _executingPoint--;
           break;
       }
+      _executingPoint++;
     }
   }
-  private void movePointerRight()
-  {
-    _pointer++;
-  }
-  private void movePointerLeft()
-  {
-    _pointer--;
-    if(_pointer < 0)
-      _pointer = 0;
-  }
-  private void increaseCellValue()
-  {
-    expandArray();
-    _array[_pointer]++;
-  }
-  private void decreaseCellValue()
-  {
-    expandArray();
-    _array[_pointer]--;
-  }
+
   private void expandArray()
   {
     if(_pointer >= _array.length)
@@ -94,31 +115,16 @@ public class Interpreter
       _array = newArray;
     }
   }
+
   private byte getCellValue()
   {
     if(_pointer >= _array.length)
       return (0);
     return (_array[_pointer]);
   }
-  private void outputCurrentCell()
-  {
-    System.out.print((char)(getCellValue() & 0xFF));
-  }
-  private void inputIntoCurrentCell()
-  {
-    expandArray();
-    try
-    {
-      _array[_pointer] = (byte)System.in.read();
-    }
-    catch(Exception exception)
-    {
-      exception.printStackTrace();
-    }
-  }
-
   private void dumpMemory()
   {
+    System.out.println();
     for(int index = 0; index < (_array.length / 8) + 1; index++)
     {
       for(int offset = 0; offset < 8; offset++)
@@ -137,5 +143,9 @@ public class Interpreter
           System.out.print((index * 8 + offset == _pointer ? "{" : " ") + "." + (index * 8 + offset == _pointer ? "}" : " "));
       System.out.println();
     }
+  }
+  protected void helpExit()
+  {
+    super.helpExit();
   }
 }

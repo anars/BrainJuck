@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.util.Calendar;
-
 public abstract class AbstractClass
 {
   protected static final char COMMAND_LOOP_START = '[';
@@ -18,6 +16,7 @@ public abstract class AbstractClass
   protected static final char COMMAND_OUTPUT_VALUE = '.';
   protected static final char COMMAND_INPUT_VALUE = ',';
   protected static final char COMMAND_DUMP_MEMORY = '#';
+
   protected String loadSourceFile(File sourceFile)
   {
     String sourceCode = null;
@@ -52,7 +51,6 @@ public abstract class AbstractClass
     }
     return (sourceCode);
   }
-
   protected boolean checkForBrackets(String sourceCode)
   {
     String brackets = sourceCode.replaceAll("[^\\" + COMMAND_LOOP_START + "\\" + COMMAND_LOOP_END + "]", "");
@@ -61,12 +59,10 @@ public abstract class AbstractClass
       count += (brackets.charAt(index) == COMMAND_LOOP_START ? 1 : -1);
     return (count == 0);
   }
-
   protected String stripEverything(String sourceCode)
   {
     return (stripEverything(sourceCode, false));
   }
-
   protected String stripEverything(String sourceCode, boolean debug)
   {
     return (sourceCode.replaceAll("[^" + //
@@ -81,26 +77,11 @@ public abstract class AbstractClass
     (debug ? "\\" + COMMAND_DUMP_MEMORY : "") + //
     "]", ""));
   }
+
   protected void errorExit(String message, int errorCode)
   {
     System.err.println(message + ". Please type -help for details.");
     System.exit(errorCode);
   }
-  protected void helpExit()
-  {
-    System.out.println("\nBrainfuckJC - Brainfuck to Java Converter/Compiler - version 1.0\n" + //
-      "Copyright (c) " + Calendar.getInstance().get(Calendar.YEAR) + " Anar Software LLC. < http://anars.com >\n\n" + //
-      "This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\n" + //
-      "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n" + //
-      "See the GNU General Public License for more details at http://www.gnu.org/licenses\n\n" + //
-      "USAGE:\n" + //
-      "\tjava -jar BrainfuckJC.jar [OPTIONS]...\n\n" + //
-      "DESCRIPTION:\n\n" + //
-      "-brainfuck-file=[PATH]\n" + //
-      "\tFull path to Brainfuck source file.\n" + //
-      "\tE.g. -brainfuck-file=../test.bf\n\n" + //
-      "-help\n" + //
-      "\tDisplays this help\n");
-    System.exit(0);
-  }
+
 }

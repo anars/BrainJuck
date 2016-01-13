@@ -84,6 +84,7 @@
          <hash n="Default">
             <value n="custom" v="false"/>
             <value n="name" v="Default"/>
+            <value n="programArguments" v="/Users/kay/Projects/public/anars/BrainJuck/Hello.bf"/>
             <url n="targetURL" path="source/com/anars/brainjuck/Main.java"/>
          </hash>
       </hash>
