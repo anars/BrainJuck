@@ -20,10 +20,14 @@
  */
 package com.anars.brainjuck;
 
+import java.io.File;
+
 public class Optimizer
+  extends AbstractClass
 {
-  public Optimizer()
+  public Optimizer(File sourceFile, File outputPath)
   {
     super();
+    String sourceCode = loadSourceFile(sourceFile);
   }
 }

@@ -20,10 +20,122 @@
  */
 package com.anars.brainjuck;
 
+import java.io.File;
+
 public class Interpreter
+  extends AbstractClass
 {
-  public Interpreter()
+  private byte[] _array = new byte[0];
+  private String sourceCode = null;
+  private int _pointer = 0;
+  private int _executingPoint = 0;
+  public Interpreter(File sourceFile, boolean debug)
   {
     super();
+    sourceCode = stripEverything(loadSourceFile(sourceFile), debug);
+    if(!checkForBrackets(sourceCode))
+      errorExit("brackets", -1);
+    int sourceLength = sourceCode.length();
+    while(_executingPoint < sourceLength)
+    {
+      char command = sourceCode.charAt(_executingPoint);
+      switch(command)
+      {
+        case COMMAND_INCREASE_VALUE:
+          increaseCellValue();
+          break;
+        case COMMAND_DECREASE_VALUE:
+          decreaseCellValue();
+          break;
+        case COMMAND_MOVE_POINTER_RIGHT:
+          movePointerRight();
+          break;
+        case COMMAND_MOVE_POINTER_LEFT:
+          movePointerLeft();
+          break;
+        case COMMAND_INPUT_VALUE:
+          inputIntoCurrentCell();
+          break;
+        case COMMAND_OUTPUT_VALUE:
+          outputCurrentCell();
+          break;
+        case COMMAND_DUMP_MEMORY:
+          memoryDump();
+          break;
+      }
+    }
+  }
+  private void movePointerRight()
+  {
+    _pointer++;
+  }
+  private void movePointerLeft()
+  {
+    _pointer--;
+    if(_pointer < 0)
+      _pointer = 0;
+  }
+  private void increaseCellValue()
+  {
+    expandArray();
+    _array[_pointer]++;
+  }
+  private void decreaseCellValue()
+  {
+    expandArray();
+    _array[_pointer]--;
+  }
+  private void expandArray()
+  {
+    if(_pointer >= _array.length)
+    {
+      byte[] newArray = new byte[_pointer + 1];
+      System.arraycopy(_array, 0, newArray, 0, _array.length);
+      _array = newArray;
+    }
+  }
+  private byte getCellValue()
+  {
+    if(_pointer >= _array.length)
+      return (0);
+    return (_array[_pointer]);
+  }
+  private void outputCurrentCell()
+  {
+    System.out.print((char)(getCellValue() & 0xFF));
+  }
+  private void inputIntoCurrentCell()
+  {
+    expandArray();
+    try
+    {
+      _array[_pointer] = (byte)System.in.read();
+    }
+    catch(Exception exception)
+    {
+      exception.printStackTrace();
+    }
+  }
+
+  private void dumpMemory()
+  {
+    for(int index = 0; index < (_array.length / 8) + 1; index++)
+    {
+      for(int offset = 0; offset < 8; offset++)
+        if(index * 8 + offset < _array.length)
+          System.out.print((index * 8 + offset == _pointer ? "{" : " ") + Integer.toString(1000 + (0xff & _array[index * 8 + offset])).substring(1) + (index * 8 + offset == _pointer ? "}" : " "));
+        else
+          System.out.print((index * 8 + offset == _pointer ? "{" : " ") + "000" + (index * 8 + offset == _pointer ? "}" : " "));
+      System.out.print("\\t");
+      for(int offset = 0; offset < 8; offset++)
+        if(index * 8 + offset < _array.length)
+          if((char)(_array[index * 8 + offset] & 0xFF) > 31)
+            System.out.print((index * 8 + offset == _pointer ? "{" : " ") + (char)(_array[index * 8 + offset] & 0xFF) + (index * 8 + offset == _pointer ? "}" : " "));
+          else
+            System.out.print((index * 8 + offset == _pointer ? "{" : " ") + "." + (index * 8 + offset == _pointer ? "}" : " "));
+        else
+          System.out.print((index * 8 + offset == _pointer ? "{" : " ") + "." + (index * 8 + offset == _pointer ? "}" : " "));
+      System.out.println();
+    }
   }
 }

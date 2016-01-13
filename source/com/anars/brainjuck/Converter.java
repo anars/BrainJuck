@@ -72,8 +72,14 @@ public class Converter
         // Ignore
       }
     }
-    if(input.replaceAll("[^\\[]", "").length() != input.replaceAll("[^\\]]", "").length())
-      errorExit("while paran", -1);
+    {
+      String brackets = input.replaceAll("[^\\[\\]]", "");
+      int count = 0;
+      for(int index = 0; index < brackets.length(); index++)
+        count += (brackets.charAt(index) == '[' ? 1 : -1);
+      if(count != 0)
+        errorExit("while paran", -1);
+    }
     String code = null;
     boolean movePointerRight = false;
     boolean movePointerLeft = false;
@@ -499,11 +505,11 @@ public class Converter
         iae.printStackTrace();
       }
   }
+
   private String intent(int indentation)
   {
     return (repeatChar(indentation, '\t'));
   }
-
   private String repeatChar(int times, char character)
   {
     StringBuilder stringBuilder = new StringBuilder();
@@ -511,7 +517,6 @@ public class Converter
       stringBuilder.append(character);
     return (stringBuilder.toString());
   }
-
   public static void main(String[] args)
   {
     if(args.length == 0)
@@ -578,12 +583,12 @@ public class Converter
     }
     new Converter(brainfuckFile, outputPath, javaPackage, javaClass, executionSteps, outputFormat, debugTrace);
   }
+
   private static void errorExit(String message, int errorCode)
   {
     System.err.println(message + ". Please type -help for details.");
     System.exit(errorCode);
   }
-
   private static void helpExit()
   {
     System.out.println("\nBrainfuckJC - Brainfuck to Java Converter/Compiler - version 1.0\n" + //
