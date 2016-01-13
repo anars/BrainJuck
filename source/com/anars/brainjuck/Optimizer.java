@@ -25,9 +25,9 @@ import java.io.File;
 public class Optimizer
   extends AbstractClass
 {
-  public Optimizer(File sourceFile, File outputPath)
+  public Optimizer(File inputFile, File outputFile)
   {
     super();
-    String sourceCode = loadSourceFile(sourceFile);
+    String sourceCode = loadSourceFile(inputFile);
   }
 }

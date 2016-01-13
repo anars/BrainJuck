@@ -20,9 +20,11 @@
  */
 package com.anars.brainjuck;
 
+import java.io.File;
+
 public class Generator
 {
-  public Generator()
+  public Generator(File inputFile, File outputFile)
   {
     super();
   }

@@ -20,9 +20,11 @@
  */
 package com.anars.brainjuck;
 
+import java.io.File;
+
 public class Formatter
 {
-  public Formatter()
+  public Formatter(File inputFile, File outputFile)
   {
     super();
   }
