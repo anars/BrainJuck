@@ -32,7 +32,7 @@ public class Interpreter
   public Interpreter(File sourceFile, boolean debug)
   {
     super();
-    sourceCode = stripEverything(loadSourceFile(sourceFile), debug);
+    sourceCode = stripEverything(readSourceFile(sourceFile), debug);
     if(!checkForBrackets(sourceCode))
       errorExit("brackets", -1);
     int sourceLength = sourceCode.length();

@@ -17,7 +17,7 @@ public abstract class AbstractClass
   protected static final char COMMAND_INPUT_VALUE = ',';
   protected static final char COMMAND_DUMP_MEMORY = '#';
 
-  protected String loadSourceFile(File sourceFile)
+  protected String readSourceFile(File sourceFile)
   {
     String sourceCode = null;
     BufferedReader bufferedReader = null;
