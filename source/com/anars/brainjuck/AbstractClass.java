@@ -1,8 +1,10 @@
 package com.anars.brainjuck;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public abstract class AbstractClass
@@ -16,7 +18,6 @@ public abstract class AbstractClass
   protected static final char COMMAND_OUTPUT_VALUE = '.';
   protected static final char COMMAND_INPUT_VALUE = ',';
   protected static final char COMMAND_DUMP_MEMORY = '#';
-
   protected String readSourceFile(File sourceFile)
   {
     String sourceCode = null;
@@ -51,6 +52,31 @@ public abstract class AbstractClass
     }
     return (sourceCode);
   }
+  protected void writeSourceFile(File sourceFile, String sourceCode)
+  {
+    BufferedWriter bufferedWriter = null;
+    try
+    {
+      bufferedWriter = new BufferedWriter(new FileWriter(sourceFile));
+      bufferedWriter.write(sourceCode);
+    }
+    catch(Exception exception)
+    {
+      errorExit("haha", -1);
+    }
+    finally
+    {
+      try
+      {
+        bufferedWriter.close();
+      }
+      catch(IOException ioException)
+      {
+        // Ignore
+      }
+    }
+  }
+
   protected boolean checkForBrackets(String sourceCode)
   {
     String brackets = sourceCode.replaceAll("[^\\" + COMMAND_LOOP_START + "\\" + COMMAND_LOOP_END + "]", "");
@@ -59,10 +85,12 @@ public abstract class AbstractClass
       count += (brackets.charAt(index) == COMMAND_LOOP_START ? 1 : -1);
     return (count == 0);
   }
+
   protected String stripEverything(String sourceCode)
   {
     return (stripEverything(sourceCode, false));
   }
+
   protected String stripEverything(String sourceCode, boolean debug)
   {
     return (sourceCode.replaceAll("[^" + //
@@ -77,11 +105,9 @@ public abstract class AbstractClass
     (debug ? "\\" + COMMAND_DUMP_MEMORY : "") + //
     "]", ""));
   }
-
   protected void errorExit(String message, int errorCode)
   {
     System.err.println(message + ". Please type -help for details.");
     System.exit(errorCode);
   }
-
 }

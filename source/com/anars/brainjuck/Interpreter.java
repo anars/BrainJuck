@@ -29,6 +29,7 @@ public class Interpreter
   private String sourceCode = null;
   private int _pointer = 0;
   private int _executingPoint = 0;
+
   public Interpreter(File sourceFile, boolean debug)
   {
     super();
@@ -104,6 +105,7 @@ public class Interpreter
       _executingPoint++;
     }
   }
+
   private void expandArray()
   {
     if(_pointer >= _array.length)
@@ -113,13 +115,13 @@ public class Interpreter
       _array = newArray;
     }
   }
+
   private byte getCellValue()
   {
     if(_pointer >= _array.length)
       return (0);
     return (_array[_pointer]);
   }
-
   private void dumpMemory()
   {
     System.out.println();

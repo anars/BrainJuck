@@ -25,14 +25,15 @@ import java.io.File;
 public class Optimizer
   extends AbstractClass
 {
-  public Optimizer(File inputFile, File outputFile)
+  public Optimizer(File inputFile, File outputFile, int lineWrap)
   {
     super();
     String sourceCode = stripEverything(readSourceFile(inputFile));
+    if(!checkForBrackets(sourceCode))
+      errorExit("brackets", -1);
     int lastIndexOfBracket = sourceCode.lastIndexOf(COMMAND_LOOP_END);
     int lastIndexOfDot = sourceCode.lastIndexOf(COMMAND_OUTPUT_VALUE);
     sourceCode = sourceCode.substring(0, Math.max(lastIndexOfBracket, lastIndexOfDot) + 1).replaceAll("[\\" + COMMAND_LOOP_START + "][\\" + COMMAND_LOOP_END + "]", "" + COMMAND_LOOP_START + "~" + COMMAND_LOOP_END);
-    System.out.println(sourceCode);
     StringBuilder stringBuilder = null;
     int sourceLength = 0;
     do
@@ -81,9 +82,16 @@ public class Optimizer
         }
         index++;
       }
-      //System.out.println(stringBuilder.toString());
     }
     while(stringBuilder.length() != sourceLength);
-    System.out.println(stringBuilder.toString().replaceAll("[\\" + COMMAND_LOOP_START + "][\\" + COMMAND_LOOP_END + "]", "").replaceAll("[\\" + COMMAND_LOOP_START + "]~[\\" + COMMAND_LOOP_END + "]", "" + COMMAND_LOOP_START + COMMAND_LOOP_END));
+    sourceCode = stringBuilder.toString().replaceAll("[\\" + COMMAND_LOOP_START + "][\\" + COMMAND_LOOP_END + "]", "").replaceAll("[\\" + COMMAND_LOOP_START + "]~[\\" + COMMAND_LOOP_END + "]", "" + COMMAND_LOOP_START + COMMAND_LOOP_END);
+    stringBuilder = new StringBuilder();
+    sourceLength = sourceCode.length();
+    if(lineWrap != 0)
+      for(int index = 0; index < sourceLength; index += lineWrap)
+        stringBuilder.append(sourceCode.substring(index, index + lineWrap > sourceLength ? sourceLength : index + lineWrap) + "\n");
+    else
+      stringBuilder.append(sourceCode);
+    writeSourceFile(outputFile, stringBuilder.toString());
   }
 }

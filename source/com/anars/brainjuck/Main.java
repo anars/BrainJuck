@@ -32,15 +32,15 @@ public class Main
   }
   public static void main(String[] args)
   {
-    // Main main = new Main();
-    if(args[0].equalsIgnoreCase("-interpreter"))
+    String submodule = args[0].toLowerCase();
+    if(submodule.equals("interpreter"))
     {
       boolean debug = false;
       File sourceFile = null;
       for(int index = 1; index < args.length; index++)
-        if(args[index].equalsIgnoreCase("-debug"))
+        if(args[index].toLowerCase().equalsIgnoreCase("-debug"))
           debug = true;
-        else if(args[index].equalsIgnoreCase("-help"))
+        else if(args[index].toLowerCase().equalsIgnoreCase("-help"))
           interpreterHelp();
         else
           sourceFile = new File(args[index]);
@@ -48,19 +48,89 @@ public class Main
         errorExit("Please specify Brainfuck source file.", -1);
       new Interpreter(sourceFile, debug);
     }
-    else if(args[0].equalsIgnoreCase("-optimizer"))
+    else if(submodule.equals("optimizer"))
     {
-      if(args.length != 3)
-        errorExit("Please specify input and output files.", -1);
-      new Optimizer(new File(args[1]), new File(args[2]));
+      int lineWrap = 80;
+      File inputFile = null;
+      File outputFile = null;
+      for(int index = 1; index < args.length; index++)
+        if(args[index].toLowerCase().startsWith("-wrap="))
+        {
+          try
+          {
+            lineWrap = Integer.parseInt(args[index].substring(args[index].lastIndexOf("=") + 1));
+            if(lineWrap < 0)
+              errorExit("Invalid -wrap value.", -1);
+          }
+          catch(Exception exception)
+          {
+            errorExit("Invalid -wrap value.", -1);
+          }
+        }
+        else if(args[index].equalsIgnoreCase("-help"))
+        {
+          optimizerHelp();
+        }
+        else if(inputFile == null)
+        {
+          inputFile = new File(args[index]);
+        }
+        else if(outputFile == null)
+        {
+          outputFile = new File(args[index]);
+        }
+        else
+        {
+          errorExit("invalid parameter " + args[index], -1);
+        }
+      if(inputFile == null)
+        errorExit("Please specify Brainfuck input source file.", -1);
+      if(outputFile == null)
+        errorExit("Please specify Brainfuck output source file.", -1);
+      new Optimizer(inputFile, outputFile, lineWrap);
     }
-    else if(args[0].equalsIgnoreCase("-formatter"))
+    else if(submodule.equals("formatter"))
     {
-      if(args.length != 3)
-        errorExit("Please specify input and output files.", -1);
-      new Formatter(new File(args[1]), new File(args[2]));
+      int tabSize = 0;
+      File inputFile = null;
+      File outputFile = null;
+      for(int index = 1; index < args.length; index++)
+        if(args[index].toLowerCase().startsWith("-tab="))
+        {
+          try
+          {
+            tabSize = Integer.parseInt(args[index].substring(args[index].lastIndexOf("=") + 1));
+            if(tabSize < 0)
+              errorExit("Invalid -wrap value.", -1);
+          }
+          catch(Exception exception)
+          {
+            errorExit("Invalid -wrap value.", -1);
+          }
+        }
+        else if(args[index].equalsIgnoreCase("-help"))
+        {
+          optimizerHelp();
+        }
+        else if(inputFile == null)
+        {
+          inputFile = new File(args[index]);
+        }
+        else if(outputFile == null)
+        {
+          outputFile = new File(args[index]);
+        }
+        else
+        {
+          errorExit("invalid parameter " + args[index], -1);
+        }
+      if(inputFile == null)
+        errorExit("Please specify Brainfuck input source file.", -1);
+      if(outputFile == null)
+        errorExit("Please specify Brainfuck output source file.", -1);
+      new Formatter(inputFile, outputFile, tabSize);
     }
-    else if(args[0].equalsIgnoreCase("-generator"))
+    else if(submodule.equals("generator"))
     {
       if(args.length != 3)
         errorExit("Please specify input and output files.", -1);
@@ -108,6 +178,9 @@ public class Main
       "-help\n" + //
       "\tDisplays this help\n");
     System.exit(0);
+  }
+  private static void optimizerHelp()
+  {
   }
 
   private static void helpHeader()

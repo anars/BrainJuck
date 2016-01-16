@@ -23,9 +23,57 @@ package com.anars.brainjuck;
 import java.io.File;
 
 public class Formatter
+  extends AbstractClass
 {
-  public Formatter(File inputFile, File outputFile)
+  public Formatter(File inputFile, File outputFile, int tabSize)
   {
     super();
+    String sourceCode = stripEverything(readSourceFile(inputFile));
+    if(!checkForBrackets(sourceCode))
+      errorExit("brackets", -1);
+    StringBuilder stringBuilder = new StringBuilder();
+    int sourceLength = sourceCode.length();
+    String indentChars = (tabSize == 0 ? "\t" : repeatChar(tabSize, " "));
+    int index = 0;
+    int indentation = 0;
+    char lastCommand = 0;
+    while(index < sourceLength)
+    {
+      char command = sourceCode.charAt(index);
+      if(command == COMMAND_LOOP_START)
+      {
+        stringBuilder.append("\n");
+        stringBuilder.append(repeatChar(indentation, indentChars));
+        stringBuilder.append(command);
+        indentation++;
+      }
+      else if(command == COMMAND_LOOP_END)
+      {
+        stringBuilder.append("\n");
+        indentation--;
+        stringBuilder.append(repeatChar(indentation, indentChars));
+        stringBuilder.append(command);
+      }
+      else
+      {
+        if(lastCommand != 0 && command != lastCommand)
+        {
+          stringBuilder.append("\n");
+          stringBuilder.append(repeatChar(indentation, indentChars));
+        }
+        stringBuilder.append(command);
+      }
+      lastCommand = command;
+      index++;
+    }
+    writeSourceFile(outputFile, stringBuilder.toString());
+  }
+
+  private String repeatChar(int times, String characters)
+  {
+    StringBuilder stringBuilder = new StringBuilder();
+    for(int index = 0; index < times; index++)
+      stringBuilder.append(characters);
+    return (stringBuilder.toString());
   }
 }
