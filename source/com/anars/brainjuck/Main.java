@@ -95,17 +95,17 @@ public class Main
       File inputFile = null;
       File outputFile = null;
       for(int index = 1; index < args.length; index++)
-        if(args[index].toLowerCase().startsWith("-tab="))
+        if(args[index].toLowerCase().startsWith("-tabsize="))
         {
           try
           {
             tabSize = Integer.parseInt(args[index].substring(args[index].lastIndexOf("=") + 1));
             if(tabSize < 0)
-              errorExit("Invalid -wrap value.", -1);
+              errorExit("Invalid -tabsize value.", -1);
           }
           catch(Exception exception)
           {
-            errorExit("Invalid -wrap value.", -1);
+            errorExit("Invalid -tabsize value.", -1);
           }
         }
         else if(args[index].equalsIgnoreCase("-help"))
@@ -132,16 +132,36 @@ public class Main
     }
     else if(submodule.equals("generator"))
     {
-      if(args.length != 3)
-        errorExit("Please specify input and output files.", -1);
-      new Generator(new File(args[1]), new File(args[2]));
+      File inputFile = null;
+      File outputFile = null;
+      for(int index = 1; index < args.length; index++)
+        if(args[index].equalsIgnoreCase("-help"))
+        {
+          generatorHelp();
+        }
+        else if(inputFile == null)
+        {
+          inputFile = new File(args[index]);
+        }
+        else if(outputFile == null)
+        {
+          outputFile = new File(args[index]);
+        }
+        else
+        {
+          errorExit("invalid parameter " + args[index], -1);
+        }
+      if(inputFile == null)
+        errorExit("Please specify Brainfuck input source file.", -1);
+      if(outputFile == null)
+        errorExit("Please specify Brainfuck output source file.", -1);
+      new Generator(inputFile, outputFile);
     }
     else
     {
       help();
     }
   }
-
   private static void errorExit(String message, int errorCode)
   {
     System.err.println(message + ". Please type -help for details.");
@@ -163,7 +183,6 @@ public class Main
       "\tConverts text file to Brainfuck source code.\n");
     System.exit(0);
   }
-
   private static void interpreterHelp()
   {
     helpHeader();
@@ -179,10 +198,13 @@ public class Main
       "\tDisplays this help\n");
     System.exit(0);
   }
+
   private static void optimizerHelp()
   {
   }
-
+  private static void generatorHelp()
+  {
+  }
   private static void helpHeader()
   {
     System.out.println("\nBrainJuck - Rapid Application Development with only 3 bits!\n" + //

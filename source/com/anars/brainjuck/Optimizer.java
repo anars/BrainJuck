@@ -28,7 +28,7 @@ public class Optimizer
   public Optimizer(File inputFile, File outputFile, int lineWrap)
   {
     super();
-    String sourceCode = stripEverything(readSourceFile(inputFile));
+    String sourceCode = stripEverything(readFile(inputFile));
     if(!checkForBrackets(sourceCode))
       errorExit("brackets", -1);
     int lastIndexOfBracket = sourceCode.lastIndexOf(COMMAND_LOOP_END);
@@ -92,6 +92,6 @@ public class Optimizer
         stringBuilder.append(sourceCode.substring(index, index + lineWrap > sourceLength ? sourceLength : index + lineWrap) + "\n");
     else
       stringBuilder.append(sourceCode);
-    writeSourceFile(outputFile, stringBuilder.toString());
+    writeFile(outputFile, stringBuilder.toString());
   }
 }

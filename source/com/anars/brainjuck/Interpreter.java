@@ -33,7 +33,7 @@ public class Interpreter
   public Interpreter(File sourceFile, boolean debug)
   {
     super();
-    sourceCode = stripEverything(readSourceFile(sourceFile), debug);
+    sourceCode = stripEverything(readFile(sourceFile), debug);
     if(!checkForBrackets(sourceCode))
       errorExit("brackets", -1);
     int sourceLength = sourceCode.length();
@@ -122,6 +122,7 @@ public class Interpreter
       return (0);
     return (_array[_pointer]);
   }
+
   private void dumpMemory()
   {
     System.out.println();

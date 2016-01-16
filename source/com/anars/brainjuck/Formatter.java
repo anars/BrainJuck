@@ -28,7 +28,7 @@ public class Formatter
   public Formatter(File inputFile, File outputFile, int tabSize)
   {
     super();
-    String sourceCode = stripEverything(readSourceFile(inputFile));
+    String sourceCode = stripEverything(readFile(inputFile));
     if(!checkForBrackets(sourceCode))
       errorExit("brackets", -1);
     StringBuilder stringBuilder = new StringBuilder();
@@ -66,14 +66,6 @@ public class Formatter
       lastCommand = command;
       index++;
     }
-    writeSourceFile(outputFile, stringBuilder.toString());
-  }
-
-  private String repeatChar(int times, String characters)
-  {
-    StringBuilder stringBuilder = new StringBuilder();
-    for(int index = 0; index < times; index++)
-      stringBuilder.append(characters);
-    return (stringBuilder.toString());
+    writeFile(outputFile, stringBuilder.toString());
   }
 }

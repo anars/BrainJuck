@@ -18,13 +18,14 @@ public abstract class AbstractClass
   protected static final char COMMAND_OUTPUT_VALUE = '.';
   protected static final char COMMAND_INPUT_VALUE = ',';
   protected static final char COMMAND_DUMP_MEMORY = '#';
-  protected String readSourceFile(File sourceFile)
+
+  protected String readFile(File file)
   {
     String sourceCode = null;
     BufferedReader bufferedReader = null;
     try
     {
-      bufferedReader = new BufferedReader(new FileReader(sourceFile));
+      bufferedReader = new BufferedReader(new FileReader(file));
       StringBuilder stringBuilder = new StringBuilder();
       String line = bufferedReader.readLine();
       while(line != null)
@@ -52,13 +53,14 @@ public abstract class AbstractClass
     }
     return (sourceCode);
   }
-  protected void writeSourceFile(File sourceFile, String sourceCode)
+
+  protected void writeFile(File file, String string)
   {
     BufferedWriter bufferedWriter = null;
     try
     {
-      bufferedWriter = new BufferedWriter(new FileWriter(sourceFile));
-      bufferedWriter.write(sourceCode);
+      bufferedWriter = new BufferedWriter(new FileWriter(file));
+      bufferedWriter.write(string);
     }
     catch(Exception exception)
     {
@@ -105,9 +107,18 @@ public abstract class AbstractClass
     (debug ? "\\" + COMMAND_DUMP_MEMORY : "") + //
     "]", ""));
   }
+
   protected void errorExit(String message, int errorCode)
   {
     System.err.println(message + ". Please type -help for details.");
     System.exit(errorCode);
+  }
+
+  protected String repeatChar(int times, String characters)
+  {
+    StringBuilder stringBuilder = new StringBuilder();
+    for(int index = 0; index < times; index++)
+      stringBuilder.append(characters);
+    return (stringBuilder.toString());
   }
 }

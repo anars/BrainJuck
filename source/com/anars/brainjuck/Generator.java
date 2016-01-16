@@ -23,9 +23,48 @@ package com.anars.brainjuck;
 import java.io.File;
 
 public class Generator
+  extends AbstractClass
 {
   public Generator(File inputFile, File outputFile)
   {
     super();
+    String text = readFile(inputFile);
+    StringBuilder stringBuilder = new StringBuilder();
+    int previousChar = 0;
+    for(int index = 0; index < text.length(); index++)
+    {
+      int character = 0xFF & text.charAt(index);
+      int difference = previousChar - character;
+      char command = (difference < 0 ? COMMAND_INCREASE_VALUE : COMMAND_DECREASE_VALUE);
+      difference = Math.abs(difference);
+      if(difference > 0 && difference < 8)
+      {
+        stringBuilder.append(repeatChar(difference, "" + command));
+      }
+      else if(difference >= 8)
+      {
+        int loopCount = (int)Math.sqrt(difference);
+        int multiplier = loopCount;
+        while(difference != 0 && (loopCount * (multiplier + 1)) <= difference)
+          multiplier++;
+        int remainder = difference - (loopCount * multiplier);
+        stringBuilder.append(COMMAND_MOVE_POINTER_RIGHT);
+        stringBuilder.append(repeatChar(loopCount, "" + COMMAND_INCREASE_VALUE));
+        stringBuilder.append(COMMAND_LOOP_START);
+        stringBuilder.append(COMMAND_MOVE_POINTER_LEFT);
+        stringBuilder.append(repeatChar(multiplier, "" + command));
+        stringBuilder.append(COMMAND_MOVE_POINTER_RIGHT);
+        stringBuilder.append(COMMAND_DECREASE_VALUE);
+        stringBuilder.append(COMMAND_LOOP_END);
+        if(remainder > 0)
+        {
+          stringBuilder.append(COMMAND_MOVE_POINTER_LEFT);
+          stringBuilder.append(repeatChar(remainder, "" + command));
+        }
+      }
+      stringBuilder.append(COMMAND_OUTPUT_VALUE);
+      previousChar = character;
+    }
+    writeFile(outputFile, stringBuilder.toString());
   }
 }

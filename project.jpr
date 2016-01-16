@@ -84,7 +84,7 @@
          <hash n="Default">
             <value n="custom" v="false"/>
             <value n="name" v="Default"/>
-            <value n="programArguments" v="Formatter -tab=1 /Users/kay/Projects/public/anars/BrainJuck/Hello.bf /Users/kay/Projects/public/anars/BrainJuck/Hello-opt.bf"/>
+            <value n="programArguments" v="Generator /Users/kay/Projects/public/anars/BrainJuck/Hello.bf /Users/kay/Projects/public/anars/BrainJuck/Hello-opt.bf"/>
             <url n="targetURL" path="source/com/anars/brainjuck/Main.java"/>
          </hash>
       </hash>
