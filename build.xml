@@ -10,7 +10,7 @@
 		<mkdir dir="${classes.dir}"/>
 		<javac includeantruntime="false" srcdir="${source.dir}" destdir="${classes.dir}" source="1.2" target="1.2" debug="off" debuglevel="none" optimize="on"/>
 		<mkdir dir="${release.dir}"/>
-		<jar jarfile="${release.dir}/BrainfuckJC.jar" basedir="${classes.dir}" level="9">
+		<jar jarfile="${release.dir}/BrainJuck.jar" basedir="${classes.dir}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="com.anars.brainjuck.Main"/>
 			</manifest>

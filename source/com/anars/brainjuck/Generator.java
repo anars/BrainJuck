@@ -56,11 +56,9 @@ public class Generator
         stringBuilder.append(COMMAND_MOVE_POINTER_RIGHT);
         stringBuilder.append(COMMAND_DECREASE_VALUE);
         stringBuilder.append(COMMAND_LOOP_END);
+        stringBuilder.append(COMMAND_MOVE_POINTER_LEFT);
         if(remainder > 0)
-        {
-          stringBuilder.append(COMMAND_MOVE_POINTER_LEFT);
           stringBuilder.append(repeatChar(remainder, "" + command));
-        }
       }
       stringBuilder.append(COMMAND_OUTPUT_VALUE);
       previousChar = character;
