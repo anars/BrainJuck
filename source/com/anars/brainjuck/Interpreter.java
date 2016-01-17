@@ -35,7 +35,7 @@ public class Interpreter
     super();
     sourceCode = stripEverything(readFile(sourceFile), debug);
     if(!checkForBrackets(sourceCode))
-      errorExit("brackets", -1);
+      errorExit("Mismatched command " + COMMAND_LOOP_START + " " + COMMAND_LOOP_END);
     int sourceLength = sourceCode.length();
     while(_executingPoint < sourceLength)
     {

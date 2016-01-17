@@ -38,7 +38,7 @@ public abstract class AbstractClass
     }
     catch(Exception exception)
     {
-      errorExit("haha", -1);
+      errorExit("Error occurred while reading file " + file.toString());
     }
     finally
     {
@@ -64,7 +64,7 @@ public abstract class AbstractClass
     }
     catch(Exception exception)
     {
-      errorExit("haha", -1);
+      errorExit("Error occurred while writing file " + file.toString());
     }
     finally
     {
@@ -108,10 +108,10 @@ public abstract class AbstractClass
     "]", ""));
   }
 
-  protected void errorExit(String message, int errorCode)
+  protected void errorExit(String message)
   {
-    System.err.println(message + ". Please type -help for details.");
-    System.exit(errorCode);
+    System.err.println("Error: " + message + ".");
+    System.exit(-1);
   }
 
   protected String repeatChar(int times, String characters)

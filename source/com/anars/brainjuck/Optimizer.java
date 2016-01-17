@@ -30,7 +30,7 @@ public class Optimizer
     super();
     String sourceCode = stripEverything(readFile(inputFile));
     if(!checkForBrackets(sourceCode))
-      errorExit("brackets", -1);
+      errorExit("Mismatched command " + COMMAND_LOOP_START + " " + COMMAND_LOOP_END);
     int lastIndexOfBracket = sourceCode.lastIndexOf(COMMAND_LOOP_END);
     int lastIndexOfDot = sourceCode.lastIndexOf(COMMAND_OUTPUT_VALUE);
     sourceCode = sourceCode.substring(0, Math.max(lastIndexOfBracket, lastIndexOfDot) + 1).replaceAll("[\\" + COMMAND_LOOP_START + "][\\" + COMMAND_LOOP_END + "]", "" + COMMAND_LOOP_START + "~" + COMMAND_LOOP_END);

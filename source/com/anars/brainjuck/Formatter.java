@@ -30,7 +30,7 @@ public class Formatter
     super();
     String sourceCode = stripEverything(readFile(inputFile));
     if(!checkForBrackets(sourceCode))
-      errorExit("brackets", -1);
+      errorExit("Mismatched command " + COMMAND_LOOP_START + " " + COMMAND_LOOP_END);
     StringBuilder stringBuilder = new StringBuilder();
     int sourceLength = sourceCode.length();
     String indentChars = (tabSize == 0 ? "\t" : repeatChar(tabSize, " "));
