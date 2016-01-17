@@ -45,7 +45,7 @@ public class Generator
       {
         int loopCount = (int)Math.sqrt(difference);
         int multiplier = loopCount;
-        while(difference != 0 && (loopCount * (multiplier + 1)) <= difference)
+        while(loopCount * (multiplier + 1) <= difference)
           multiplier++;
         int remainder = difference - (loopCount * multiplier);
         stringBuilder.append(COMMAND_MOVE_POINTER_RIGHT);
