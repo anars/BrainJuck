@@ -29,17 +29,24 @@ public class Interpreter
   private String sourceCode = null;
   private int _pointer = 0;
   private int _executingPoint = 0;
+  //
+  private long _debugProgramStartedAt = 0;
+  private long _debugLoadendedAt = 0;
+  private long _debugNumberOfInstructions = 0;
 
   public Interpreter(File sourceFile, boolean debug)
   {
     super();
+    _debugProgramStartedAt = System.currentTimeMillis();
     sourceCode = stripEverything(readFile(sourceFile), debug);
+    _debugLoadendedAt = System.currentTimeMillis();
     if(!checkForBrackets(sourceCode))
       errorExit("Mismatched command " + COMMAND_LOOP_START + " " + COMMAND_LOOP_END);
     int sourceLength = sourceCode.length();
     while(_executingPoint < sourceLength)
     {
       char command = sourceCode.charAt(_executingPoint);
+      _debugNumberOfInstructions++;
       switch(command)
       {
         case COMMAND_INCREASE_VALUE:
@@ -104,6 +111,22 @@ public class Interpreter
       }
       _executingPoint++;
     }
+    if(debug)
+    {
+      long currentTime = System.currentTimeMillis();
+      System.out.println("\nBrainfuck Interpreter Statistics");
+      System.out.println("=================================");
+      System.out.println("Source Code File             : " + sourceFile);
+      System.out.println("Source Code File Size        : " + sourceFile.length() + " bytes.");
+      System.out.println("Number of Brainfuck Commands : " + sourceLength);
+      System.out.println("Number of Commands Executed  : " + _debugNumberOfInstructions);
+      System.out.println("Total Executing Time         : " + (currentTime - _debugProgramStartedAt) + " milliseconds.");
+      System.out.println("Source Code Load Time        : " + (_debugLoadendedAt - _debugProgramStartedAt) + " milliseconds.");
+      System.out.println("Command Execution Time       : " + (currentTime - _debugLoadendedAt) + " milliseconds.");
+      System.out.println("Number of Memory Cells Used  : " + _array.length);
+      System.out.print  ("Memory Dump                  :");
+      dumpMemory();
+    }
   }
 
   private void expandArray()
@@ -133,7 +156,7 @@ public class Interpreter
           System.out.print((index * 8 + offset == _pointer ? "{" : " ") + Integer.toString(1000 + (0xff & _array[index * 8 + offset])).substring(1) + (index * 8 + offset == _pointer ? "}" : " "));
         else
           System.out.print((index * 8 + offset == _pointer ? "{" : " ") + "000" + (index * 8 + offset == _pointer ? "}" : " "));
-      System.out.print("\\t");
+      System.out.print("\t");
       for(int offset = 0; offset < 8; offset++)
         if(index * 8 + offset < _array.length)
           if((char)(_array[index * 8 + offset] & 0xFF) > 31)
