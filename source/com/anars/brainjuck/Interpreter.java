@@ -124,7 +124,7 @@ public class Interpreter
       System.out.println("Source Code Load Time        : " + (_debugLoadendedAt - _debugProgramStartedAt) + " milliseconds.");
       System.out.println("Command Execution Time       : " + (currentTime - _debugLoadendedAt) + " milliseconds.");
       System.out.println("Number of Memory Cells Used  : " + _array.length);
-      System.out.print  ("Memory Dump                  :");
+      System.out.print("End of Execution Memory Dump :");
       dumpMemory();
     }
   }
