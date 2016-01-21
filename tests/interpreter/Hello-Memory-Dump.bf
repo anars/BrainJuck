@@ -1,4 +1,4 @@
-Hello Debug by Kay Anar
+Hello Memory Dump Test by Kay Anar
 
 Prints the letter H
 - #
