@@ -1,7 +1,7 @@
 /**
  * BrainJuck - Rapid Application Development with only 3 bits!
  * 
- * Generator - Brainfuck Code Generator Version 1.0
+ * Generator - Brainfuck Code Generator
  * 
  * Copyright (c) 2016 Anar Software LLC. < http://anars.com >
  * 
@@ -35,7 +35,7 @@ public class Generator
     {
       int character = 0xFF & text.charAt(index);
       int difference = previousChar - character;
-      char command = (difference < 0 ? COMMAND_INCREASE_VALUE : COMMAND_DECREASE_VALUE);
+      char command = (difference < 0 ? Instructions.INCREASE_VALUE.getCommand() : Instructions.DECREASE_VALUE.getCommand());
       difference = Math.abs(difference);
       if(difference > 0 && difference < 8)
       {
@@ -48,19 +48,19 @@ public class Generator
         while(loopCount * (multiplier + 1) <= difference)
           multiplier++;
         int remainder = difference - (loopCount * multiplier);
-        stringBuilder.append(COMMAND_MOVE_POINTER_RIGHT);
-        stringBuilder.append(repeatChar(loopCount, "" + COMMAND_INCREASE_VALUE));
-        stringBuilder.append(COMMAND_LOOP_START);
-        stringBuilder.append(COMMAND_MOVE_POINTER_LEFT);
+        stringBuilder.append(Instructions.MOVE_POINTER_RIGHT.getCommand());
+        stringBuilder.append(repeatChar(loopCount, "" + Instructions.INCREASE_VALUE.getCommand()));
+        stringBuilder.append(Instructions.LOOP_START.getCommand());
+        stringBuilder.append(Instructions.MOVE_POINTER_LEFT.getCommand());
         stringBuilder.append(repeatChar(multiplier, "" + command));
-        stringBuilder.append(COMMAND_MOVE_POINTER_RIGHT);
-        stringBuilder.append(COMMAND_DECREASE_VALUE);
-        stringBuilder.append(COMMAND_LOOP_END);
-        stringBuilder.append(COMMAND_MOVE_POINTER_LEFT);
+        stringBuilder.append(Instructions.MOVE_POINTER_RIGHT.getCommand());
+        stringBuilder.append(Instructions.DECREASE_VALUE.getCommand());
+        stringBuilder.append(Instructions.LOOP_END.getCommand());
+        stringBuilder.append(Instructions.MOVE_POINTER_LEFT.getCommand());
         if(remainder > 0)
           stringBuilder.append(repeatChar(remainder, "" + command));
       }
-      stringBuilder.append(COMMAND_OUTPUT_VALUE);
+      stringBuilder.append(Instructions.OUTPUT_VALUE.getCommand());
       previousChar = character;
     }
     writeFile(outputFile, stringBuilder.toString());

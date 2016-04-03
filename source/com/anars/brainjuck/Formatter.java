@@ -1,7 +1,7 @@
 /**
  * BrainJuck - Rapid Application Development with only 3 bits!
  * 
- * Formatter - Brainfuck Code Formatter and Beautifier Version 1.0
+ * Formatter - Brainfuck Code Formatter and Beautifier
  * 
  * Copyright (c) 2016 Anar Software LLC. < http://anars.com >
  * 
@@ -30,7 +30,7 @@ public class Formatter
     super();
     String sourceCode = stripEverything(readFile(inputFile));
     if(!checkForBrackets(sourceCode))
-      errorExit("Mismatched command " + COMMAND_LOOP_START + " " + COMMAND_LOOP_END);
+      errorExit("Mismatched command " + Instructions.LOOP_START.getCommand() + " " + Instructions.LOOP_END.getCommand());
     StringBuilder stringBuilder = new StringBuilder();
     int sourceLength = sourceCode.length();
     String indentChars = (tabSize == 0 ? "\t" : repeatChar(tabSize, " "));
@@ -40,14 +40,14 @@ public class Formatter
     while(index < sourceLength)
     {
       char command = sourceCode.charAt(index);
-      if(command == COMMAND_LOOP_START)
+      if(command == Instructions.LOOP_START.getCommand())
       {
         stringBuilder.append("\n");
         stringBuilder.append(repeatChar(indentation, indentChars));
         stringBuilder.append(command);
         indentation++;
       }
-      else if(command == COMMAND_LOOP_END)
+      else if(command == Instructions.LOOP_END.getCommand())
       {
         stringBuilder.append("\n");
         indentation--;

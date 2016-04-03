@@ -1,7 +1,7 @@
 /**
  * BrainJuck - Rapid Application Development with only 3 bits!
  * 
- * Interpreter - Brainfuck Interpreter Version 1.0
+ * Interpreter - Brainfuck Interpreter
  * 
  * Copyright (c) 2016 Anar Software LLC. < http://anars.com >
  * 
@@ -33,7 +33,6 @@ public class Interpreter
   private long _debugProgramStartedAt = 0;
   private long _debugLoadendedAt = 0;
   private long _debugNumberOfInstructions = 0;
-
   public Interpreter(File sourceFile, boolean debug)
   {
     super();
@@ -41,73 +40,79 @@ public class Interpreter
     sourceCode = stripEverything(readFile(sourceFile), debug);
     _debugLoadendedAt = System.currentTimeMillis();
     if(!checkForBrackets(sourceCode))
-      errorExit("Mismatched command " + COMMAND_LOOP_START + " " + COMMAND_LOOP_END);
+      errorExit("Mismatched command " + Instructions.LOOP_START.getCommand() + " " + Instructions.LOOP_END.getCommand());
     int sourceLength = sourceCode.length();
     while(_executingPoint < sourceLength)
     {
       char command = sourceCode.charAt(_executingPoint);
       _debugNumberOfInstructions++;
-      switch(command)
+      if(command == Instructions.INCREASE_VALUE.getCommand())
       {
-        case COMMAND_INCREASE_VALUE:
-          expandArray();
-          _array[_pointer]++;
-          break;
-        case COMMAND_DECREASE_VALUE:
-          expandArray();
-          _array[_pointer]--;
-          break;
-        case COMMAND_MOVE_POINTER_RIGHT:
-          _pointer++;
-          break;
-        case COMMAND_MOVE_POINTER_LEFT:
-          _pointer--;
-          if(_pointer < 0)
-            _pointer = 0;
-          break;
-        case COMMAND_INPUT_VALUE:
-          expandArray();
-          try
-          {
-            _array[_pointer] = (byte)System.in.read();
-          }
-          catch(Exception exception)
-          {
-            exception.printStackTrace();
-          }
-          break;
-        case COMMAND_OUTPUT_VALUE:
-          System.out.print((char)(getCellValue() & 0xFF));
-          break;
-        case COMMAND_DUMP_MEMORY:
-          dumpMemory();
-          break;
-        case COMMAND_LOOP_START:
-          if(getCellValue() == 0)
-          {
-            int count = 1;
-            while(count > 0)
-            {
-              char nextChar = sourceCode.charAt(++_executingPoint);
-              if(nextChar == COMMAND_LOOP_START)
-                count++;
-              else if(nextChar == COMMAND_LOOP_END)
-                count--;
-            }
-          }
-          break;
-        case COMMAND_LOOP_END:
+        expandArray();
+        _array[_pointer]++;
+      }
+      else if(command == Instructions.DECREASE_VALUE.getCommand())
+      {
+        expandArray();
+        _array[_pointer]--;
+      }
+      else if(command == Instructions.MOVE_POINTER_RIGHT.getCommand())
+      {
+        _pointer++;
+      }
+      else if(command == Instructions.MOVE_POINTER_LEFT.getCommand())
+      {
+        _pointer--;
+        if(_pointer < 0)
+          _pointer = 0;
+      }
+      else if(command == Instructions.INPUT_VALUE.getCommand())
+      {
+        expandArray();
+        try
+        {
+          _array[_pointer] = (byte)System.in.read();
+        }
+        catch(Exception exception)
+        {
+          exception.printStackTrace();
+        }
+      }
+      else if(command == Instructions.OUTPUT_VALUE.getCommand())
+      {
+        System.out.print((char)(getCellValue() & 0xFF));
+      }
+      else if(command == Instructions.DUMP_MEMORY.getCommand())
+      {
+        dumpMemory();
+      }
+      else if(command == Instructions.LOOP_START.getCommand())
+      {
+        if(getCellValue() == 0)
+        {
           int count = 1;
           while(count > 0)
           {
-            char nextChar = sourceCode.charAt(--_executingPoint);
-            if(nextChar == COMMAND_LOOP_START)
-              count--;
-            else if(nextChar == COMMAND_LOOP_END)
+            char nextChar = sourceCode.charAt(++_executingPoint);
+            if(nextChar == Instructions.LOOP_START.getCommand())
               count++;
+            else if(nextChar == Instructions.LOOP_END.getCommand())
+              count--;
           }
-          _executingPoint--;
-          break;
+        }
+      }
+      else if(command == Instructions.LOOP_END.getCommand())
+      {
+        int count = 1;
+        while(count > 0)
+        {
+          char nextChar = sourceCode.charAt(--_executingPoint);
+          if(nextChar == Instructions.LOOP_START.getCommand())
+            count--;
+          else if(nextChar == Instructions.LOOP_END.getCommand())
+            count++;
+        }
+        _executingPoint--;
       }
       _executingPoint++;
     }
@@ -128,7 +133,6 @@ public class Interpreter
       dumpMemory();
     }
   }
-
   private void expandArray()
   {
     if(_pointer >= _array.length)
@@ -138,14 +142,12 @@ public class Interpreter
       _array = newArray;
     }
   }
-
   private byte getCellValue()
   {
     if(_pointer >= _array.length)
       return (0);
     return (_array[_pointer]);
   }
-
   private void dumpMemory()
   {
     System.out.println();

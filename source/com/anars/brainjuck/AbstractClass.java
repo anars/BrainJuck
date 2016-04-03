@@ -1,3 +1,21 @@
+/**
+ * BrainJuck - Rapid Application Development with only 3 bits!
+ * 
+ * Copyright (c) 2016 Anar Software LLC. < http://anars.com >
+ * 
+ * This program is free software: you can redistribute it and/or modify it under 
+ * the terms of the GNU General Public License as published by the Free Software 
+ * Foundation, either version 3 of the License, or (at your option) any later 
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with 
+ * this program.  If not, see < http://www.gnu.org/licenses/ >
+ * 
+ */
 package com.anars.brainjuck;
 
 import java.io.BufferedReader;
@@ -9,16 +27,6 @@ import java.io.IOException;
 
 public abstract class AbstractClass
 {
-  protected static final char COMMAND_LOOP_START = '[';
-  protected static final char COMMAND_LOOP_END = ']';
-  protected static final char COMMAND_INCREASE_VALUE = '+';
-  protected static final char COMMAND_DECREASE_VALUE = '-';
-  protected static final char COMMAND_MOVE_POINTER_RIGHT = '>';
-  protected static final char COMMAND_MOVE_POINTER_LEFT = '<';
-  protected static final char COMMAND_OUTPUT_VALUE = '.';
-  protected static final char COMMAND_INPUT_VALUE = ',';
-  protected static final char COMMAND_DUMP_MEMORY = '#';
-
   protected String readFile(File file)
   {
     String sourceCode = null;
@@ -81,10 +89,10 @@ public abstract class AbstractClass
 
   protected boolean checkForBrackets(String sourceCode)
   {
-    String brackets = sourceCode.replaceAll("[^\\" + COMMAND_LOOP_START + "\\" + COMMAND_LOOP_END + "]", "");
+    String brackets = sourceCode.replaceAll("[^\\" + Instructions.LOOP_START.getCommand() + "\\" + Instructions.LOOP_END.getCommand() + "]", "");
     int count = 0;
     for(int index = 0; index < brackets.length(); index++)
-      count += (brackets.charAt(index) == COMMAND_LOOP_START ? 1 : -1);
+      count += (brackets.charAt(index) == Instructions.LOOP_START.getCommand() ? 1 : -1);
     return (count == 0);
   }
 
@@ -96,15 +104,15 @@ public abstract class AbstractClass
   protected String stripEverything(String sourceCode, boolean debug)
   {
     return (sourceCode.replaceAll("[^" + //
-    "\\" + COMMAND_LOOP_START + //
-    "\\" + COMMAND_LOOP_END + //
-    "\\" + COMMAND_INCREASE_VALUE + //
-    "\\" + COMMAND_DECREASE_VALUE + //
-    "\\" + COMMAND_MOVE_POINTER_RIGHT + //
-    "\\" + COMMAND_MOVE_POINTER_LEFT + //
-    "\\" + COMMAND_OUTPUT_VALUE + //
-    "\\" + COMMAND_INPUT_VALUE + //
-    (debug ? "\\" + COMMAND_DUMP_MEMORY : "") + //
+    "\\" + Instructions.LOOP_START.getCommand() + //
+    "\\" + Instructions.LOOP_END.getCommand() + //
+    "\\" + Instructions.INCREASE_VALUE.getCommand() + //
+    "\\" + Instructions.DECREASE_VALUE.getCommand() + //
+    "\\" + Instructions.MOVE_POINTER_RIGHT.getCommand() + //
+    "\\" + Instructions.MOVE_POINTER_LEFT.getCommand() + //
+    "\\" + Instructions.OUTPUT_VALUE.getCommand() + //
+    "\\" + Instructions.INPUT_VALUE.getCommand() + //
+    (debug ? "\\" + Instructions.DUMP_MEMORY.getCommand() : "") + //
     "]", ""));
   }
 

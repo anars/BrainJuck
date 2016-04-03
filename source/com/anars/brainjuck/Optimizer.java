@@ -1,7 +1,7 @@
 /**
  * BrainJuck - Rapid Application Development with only 3 bits!
  * 
- * Optimizer - Brainfuck Optimizer Version 1.0
+ * Optimizer - Brainfuck Optimizer
  * 
  * Copyright (c) 2016 Anar Software LLC. < http://anars.com >
  * 
@@ -30,16 +30,16 @@ public class Optimizer
     super();
     String sourceCode = stripEverything(readFile(inputFile));
     if(!checkForBrackets(sourceCode))
-      errorExit("Mismatched command " + COMMAND_LOOP_START + " " + COMMAND_LOOP_END);
-    int lastIndexOfBracket = sourceCode.lastIndexOf(COMMAND_LOOP_END);
-    int lastIndexOfDot = sourceCode.lastIndexOf(COMMAND_OUTPUT_VALUE);
-    sourceCode = sourceCode.substring(0, Math.max(lastIndexOfBracket, lastIndexOfDot) + 1).replaceAll("[\\" + COMMAND_LOOP_START + "][\\" + COMMAND_LOOP_END + "]", "" + COMMAND_LOOP_START + "~" + COMMAND_LOOP_END);
+      errorExit("Mismatched command " + Instructions.LOOP_START.getCommand() + " " + Instructions.LOOP_END.getCommand());
+    int lastIndexOfBracket = sourceCode.lastIndexOf(Instructions.LOOP_END.getCommand());
+    int lastIndexOfDot = sourceCode.lastIndexOf(Instructions.OUTPUT_VALUE.getCommand());
+    sourceCode = sourceCode.substring(0, Math.max(lastIndexOfBracket, lastIndexOfDot) + 1).replaceAll("[\\" + Instructions.LOOP_START.getCommand() + "][\\" + Instructions.LOOP_END.getCommand() + "]", "" + Instructions.LOOP_START.getCommand() + "~" + Instructions.LOOP_END.getCommand());
     StringBuilder stringBuilder = null;
     int sourceLength = 0;
     do
     {
       if(stringBuilder != null)
-        sourceCode = stringBuilder.toString().replaceAll("[\\" + COMMAND_LOOP_START + "][\\" + COMMAND_LOOP_END + "]", "");
+        sourceCode = stringBuilder.toString().replaceAll("[\\" + Instructions.LOOP_START.getCommand() + "][\\" + Instructions.LOOP_END.getCommand() + "]", "");
       stringBuilder = new StringBuilder();
       sourceLength = sourceCode.length();
       int index = 0;
@@ -48,28 +48,28 @@ public class Optimizer
       while(index < sourceLength)
       {
         char command = sourceCode.charAt(index);
-        if((repateType == 0 || repateType == 1) && (command == COMMAND_INCREASE_VALUE || command == COMMAND_DECREASE_VALUE))
+        if((repateType == 0 || repateType == 1) && (command == Instructions.INCREASE_VALUE.getCommand() || command == Instructions.DECREASE_VALUE.getCommand()))
         {
           repateType = 1;
-          count += (command == COMMAND_INCREASE_VALUE ? 1 : -1);
+          count += (command == Instructions.INCREASE_VALUE.getCommand() ? 1 : -1);
         }
         else if(repateType == 1)
         {
-          char newCommand = count > 0 ? COMMAND_INCREASE_VALUE : COMMAND_DECREASE_VALUE;
+          char newCommand = count > 0 ? Instructions.INCREASE_VALUE.getCommand() : Instructions.DECREASE_VALUE.getCommand();
           for(int quantity = 0; quantity < Math.abs(count); quantity++)
             stringBuilder.append(newCommand);
           count = 0;
           repateType = 0;
           index--;
         }
-        else if((repateType == 0 || repateType == 2) && (command == COMMAND_MOVE_POINTER_RIGHT || command == COMMAND_MOVE_POINTER_LEFT))
+        else if((repateType == 0 || repateType == 2) && (command == Instructions.MOVE_POINTER_RIGHT.getCommand() || command == Instructions.MOVE_POINTER_LEFT.getCommand()))
         {
           repateType = 2;
-          count += (command == COMMAND_MOVE_POINTER_RIGHT ? 1 : -1);
+          count += (command == Instructions.MOVE_POINTER_RIGHT.getCommand() ? 1 : -1);
         }
         else if(repateType == 2)
         {
-          char newCommand = count > 0 ? COMMAND_MOVE_POINTER_RIGHT : COMMAND_MOVE_POINTER_LEFT;
+          char newCommand = count > 0 ? Instructions.MOVE_POINTER_RIGHT.getCommand() : Instructions.MOVE_POINTER_LEFT.getCommand();
           for(int quantity = 0; quantity < Math.abs(count); quantity++)
             stringBuilder.append(newCommand);
           count = 0;
@@ -84,7 +84,7 @@ public class Optimizer
       }
     }
     while(stringBuilder.length() != sourceLength);
-    sourceCode = stringBuilder.toString().replaceAll("[\\" + COMMAND_LOOP_START + "][\\" + COMMAND_LOOP_END + "]", "").replaceAll("[\\" + COMMAND_LOOP_START + "]~[\\" + COMMAND_LOOP_END + "]", "" + COMMAND_LOOP_START + COMMAND_LOOP_END);
+    sourceCode = stringBuilder.toString().replaceAll("[\\" + Instructions.LOOP_START.getCommand() + "][\\" + Instructions.LOOP_END.getCommand() + "]", "").replaceAll("[\\" + Instructions.LOOP_START.getCommand() + "]~[\\" + Instructions.LOOP_END.getCommand() + "]", "" + Instructions.LOOP_START.getCommand() + Instructions.LOOP_END.getCommand());
     stringBuilder = new StringBuilder();
     sourceLength = sourceCode.length();
     if(lineWrap != 0)

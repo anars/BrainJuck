@@ -1,8 +1,6 @@
 /**
  * BrainJuck - Rapid Application Development with only 3 bits!
  * 
- * Main / Parameter Parser Class for BrainJuck Tools - Version 1.0
- * 
  * Copyright (c) 2016 Anar Software LLC. < http://anars.com >
  * 
  * This program is free software: you can redistribute it and/or modify it under 
@@ -26,6 +24,8 @@ import java.util.Calendar;
 
 public class Main
 {
+  public static final double VERSION = 1.1;
+  
   public Main()
   {
     super();
@@ -161,7 +161,7 @@ public class Main
 
   private static void help()
   {
-    System.out.println("\nBrainJuck - Rapid Application Development with only 3 bits!\n" + //
+    System.out.println("\nBrainJuck Version " + VERSION + " - Rapid Application Development with only 3 bits!\n" + //
       "Copyright (c) " + Calendar.getInstance().get(Calendar.YEAR) + " Anar Software LLC. < http://anars.com >\n\n" + //
       "This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\n" + //
       "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n" + //
