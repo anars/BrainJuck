@@ -1,7 +1,7 @@
 /**
  * BrainJuck - Rapid Application Development with only 3 bits!
  * 
- * Binary Converter - Brainfuck Code Generator
+ * ReverseFuck Converter - Brainfuck Code Generator
  * 
  * Copyright (c) 2016 Anar Software LLC. < http://anars.com >
  * 
@@ -22,53 +22,43 @@ package com.anars.brainjuck.converter;
 
 import com.anars.brainjuck.Instructions;
 
-public class Binary
+public class ReverseFuck
   implements Language
 {
-  private int _instruction = 0;
-  private int _wrapAfter = 16;
-
   @Override public String concert(char command)
   {
     String output = "";
-    _instruction++;
-    if(_instruction > _wrapAfter)
-    {
-      output += "\n";
-      _instruction = 0;
-    }
-    output += " ";
     if(command == Instructions.MOVE_POINTER_RIGHT.getCommand())
     {
-      output += "000";
+      output += Instructions.MOVE_POINTER_LEFT.getCommand();
     }
     else if(command == Instructions.MOVE_POINTER_LEFT.getCommand())
     {
-      output += "001";
+      output += Instructions.MOVE_POINTER_RIGHT.getCommand();
     }
     else if(command == Instructions.INCREASE_VALUE.getCommand())
     {
-      output += "010";
+      output += Instructions.DECREASE_VALUE.getCommand();
     }
     else if(command == Instructions.DECREASE_VALUE.getCommand())
     {
-      output += "011";
+      output += Instructions.INCREASE_VALUE.getCommand();
     }
     else if(command == Instructions.OUTPUT_VALUE.getCommand())
     {
-      output += "100";
+      output += Instructions.INPUT_VALUE.getCommand();
     }
     else if(command == Instructions.INPUT_VALUE.getCommand())
     {
-      output += "101";
+      output += Instructions.OUTPUT_VALUE.getCommand();
     }
     else if(command == Instructions.LOOP_START.getCommand())
     {
-      output += "110";
+      output += Instructions.LOOP_END.getCommand();
     }
     else if(command == Instructions.LOOP_END.getCommand())
     {
-      output += "111";
+      output += Instructions.LOOP_START.getCommand();
     }
     return (output);
   }
@@ -81,15 +71,5 @@ public class Binary
   @Override public String getHeader()
   {
     return ("");
-  }
-
-  public void setWrapAfter(int wrapAfter)
-  {
-    _wrapAfter = wrapAfter;
-  }
-
-  public int getWrapAfter()
-  {
-    return (_wrapAfter);
   }
 }
