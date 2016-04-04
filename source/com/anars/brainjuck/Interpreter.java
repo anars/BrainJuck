@@ -23,7 +23,7 @@ package com.anars.brainjuck;
 import java.io.File;
 
 public class Interpreter
-  extends AbstractClass
+  extends Submodule
 {
   private byte[] _array = new byte[0];
   private String sourceCode = null;

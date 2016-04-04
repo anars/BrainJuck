@@ -25,7 +25,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public abstract class AbstractClass
+public abstract class Submodule
 {
   protected String readFile(File file)
   {

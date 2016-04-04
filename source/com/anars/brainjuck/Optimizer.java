@@ -23,7 +23,7 @@ package com.anars.brainjuck;
 import java.io.File;
 
 public class Optimizer
-  extends AbstractClass
+  extends Submodule
 {
   public Optimizer(File inputFile, File outputFile, int lineWrap)
   {

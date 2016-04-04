@@ -23,7 +23,7 @@ package com.anars.brainjuck;
 import java.io.File;
 
 public class Formatter
-  extends AbstractClass
+  extends Submodule
 {
   public Formatter(File inputFile, File outputFile, int tabSize)
   {

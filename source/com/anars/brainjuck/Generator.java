@@ -23,7 +23,7 @@ package com.anars.brainjuck;
 import java.io.File;
 
 public class Generator
-  extends AbstractClass
+  extends Submodule
 {
   public Generator(File inputFile, File outputFile)
   {
